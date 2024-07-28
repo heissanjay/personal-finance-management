@@ -15,7 +15,7 @@ var Config Configuration
 
 func LoadConfig() {
 	Config = Configuration{
-		JWTSecret:  getenv("JWT_SECRET", "secret-key"),
+		JWTSecret:  getenv("JWT_SECRET", ""),
 		DBHost:     getenv("DB_HOST", "localhost"),
 		DBPort:     getenv("DB_PORT", "5432"),
 		DBUser:     getenv("DB_USER", "postgres"),

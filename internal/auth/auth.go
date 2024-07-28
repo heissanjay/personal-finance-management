@@ -16,6 +16,7 @@ var (
 
 type Claims struct {
 	Username string `json:"username"`
+	UserID   int    `json:"user_id"`
 	jwt.StandardClaims
 }
 
@@ -56,6 +57,7 @@ func (a *AuthService) LoginUser(username, password string) (string, error) {
 
 	claims := &Claims{
 		Username: username,
+		UserID:   registeredUser.ID,
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expirationTime.Unix(),
 		},

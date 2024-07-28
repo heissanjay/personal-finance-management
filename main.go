@@ -7,6 +7,7 @@ import (
 
 	"github.com/heissanjay/personal-finance-management/internal/auth"
 	"github.com/heissanjay/personal-finance-management/internal/config"
+	"github.com/heissanjay/personal-finance-management/internal/expense"
 	"github.com/heissanjay/personal-finance-management/internal/router"
 	"github.com/heissanjay/personal-finance-management/internal/storage/postgres"
 	"github.com/heissanjay/personal-finance-management/internal/user"
@@ -29,11 +30,13 @@ func main() {
 	}
 
 	datastore := postgres.NewPostgresDB(db)
-	datastore.InitDB()
+	if err := datastore.InitDB(); err != nil {
+		log.Fatalf("Unable to initialize DB: %v\n", err)
+	}
 
 	authService := auth.NewAuthService(datastore)
 	userHandler := user.NewHandler(authService)
-
-	router := router.NewRouter(userHandler)
+	expenseHandler := expense.NewExpenseHandler(datastore)
+	router := router.NewRouter(userHandler, expenseHandler)
 	log.Fatal(http.ListenAndServe(":8080", router))
 }
